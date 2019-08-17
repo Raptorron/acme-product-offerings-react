@@ -26,13 +26,13 @@
       const { render } = ReactDOM;
       const root = document.querySelector('#root');
 
-      const Companies = ({companies}) =>{
+      const Companies = ({companyData}) =>{
         return (
           <div>
           <h1>Companies</h1>
           <ul>
           {
-            companies.map( (company, idx) =>{
+            companyData.map( (company, idx) =>{
              return ( <li key={ idx }>
                 <h2>{ company.name }</h2>
                 <div>{ company.catchPhrase }</div>
@@ -62,7 +62,7 @@
         )
       }
 
-      const Nav = ({ path, companies, products }) => {
+      const Nav = ({ path, companyData, products }) => {
         return (
           <nav>
             <Link to='/companies' className={ path === '/companies' ? 'selected' : ''}>Companies</Link>
@@ -76,7 +76,7 @@
           super();
           this.state={
             products:[],
-            companies:[],
+            companyData:[],
             offerings:[]
           }
         }
@@ -87,16 +87,35 @@
         fetch('https://acme-users-api-rev.herokuapp.com/api/offerings')
         ]);
         const [ products, companies, offerings ] = await Promise.all(responses.map( response =>response.json()));
-        this.setState({products, companies, offerings});
 
+          const companyData = offerings.map((offering,index) => {
+          let obj = {}
+          companies.forEach(company => {
+            if(company.id == offering.companyId){
+              obj.id = offering.id
+              obj.price = offering.price
+              obj.company = company.name
+              obj.catchPhrase = company.catchPhrase
+            }
+
+          })
+            products.forEach(product => {
+              if(product.id == offering.productId){
+                obj.name = product.name
+              }
+            })
+            // console.log(obj)
+            return obj
+        })
+        this.setState({products, companyData, offerings});
         }
         render(){
-          const { products, companies, offerings } = this.state;
+          const { products, companyData, offerings } = this.state;
           return(
           <HashRouter>
-            <Route render={ (props) => <Nav products={ products } companies={ companies } path={props.location.pathname}/>}/>
+            <Route render={ (props) => <Nav products={ products } companyData={ companyData } path={props.location.pathname}/>}/>
             <Switch>
-              <Route path='/companies' render={ ()=> <Companies companies={companies} /> }/>
+              <Route path='/companies' render={ ()=> <Companies companyData={companyData} /> }/>
               <Route path='/products' render={ ()=> <Products products={products} /> }/>
                 <Redirect to='/companies' />
             </Switch>
