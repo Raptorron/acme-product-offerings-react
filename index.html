@@ -6,6 +6,16 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.0.1/react-router-dom.js"></script>
     <style>
+      nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .selected {
+        background-color: tomato;
+        color: white;
+        padding: 1rem;
+      }
     </style>
   </head>
   <body>
@@ -22,7 +32,17 @@
           <h1>Companies</h1>
           <ul>
           {
-            companies.map( (company, idx) =><li key={ idx }>{ company.name }</li> )
+            companies.map( (company, idx) =>{
+             return ( <li key={ idx }>
+                <h2>{ company.name }</h2>
+                <div>{ company.catchPhrase }</div>
+                offering:
+                <ul>
+
+                </ul>
+              </li>
+             )
+            })
           }
           </ul>
           </div>
