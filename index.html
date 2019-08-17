@@ -37,18 +37,28 @@
                 <h2>{ company.company }</h2>
                 <div>{ company.catchPhrase }</div>
                 offering:
-                <div>{ company.name } {company.price} </div>
+                {companyData.map( (company2, idx) =>{
+                  if(company.company == company2.company){
+                return (
+                  <div>{ company2.name } {company2.price} </div>
+                )
+                  }
+                })
+              }
 
                 <ul>
 
                 </ul>
               </li>
+
              )
             })
           }
-          </ul>
-          </div>
+
+        </ul>
+        </div>
         )
+
       }
 
       const Products = ({products}) =>{
